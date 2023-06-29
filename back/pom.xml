@@ -17,6 +17,8 @@
 	<properties>
 		<java.version>17</java.version>
 	</properties>
+
+
 	<dependencies>
 
 		<dependency>
@@ -52,12 +54,13 @@
 			<artifactId>mariadb-java-client</artifactId>
 		</dependency>
 
-		<!-- Dépendance pour JUnit 4 -->
 		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
+			<groupId>org.mockito</groupId>
+			<artifactId>mockito-junit-jupiter</artifactId>
 			<scope>test</scope>
 		</dependency>
+
+
 
 		<dependency>
 			<groupId>org.hibernate.validator</groupId>

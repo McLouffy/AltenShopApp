@@ -1,67 +1,90 @@
 package com.alten.shop.alterShop.service.impl;
 
+
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.util.ReflectionUtils;
 import org.springframework.stereotype.Service;
 
 import com.alten.shop.alterShop.exception.ProductNotFoundException;
+import com.alten.shop.alterShop.mapper.ProductMapper;
 import com.alten.shop.alterShop.model.Product;
+import com.alten.shop.alterShop.dto.ProductDto;
 import com.alten.shop.alterShop.repository.ProductRepository;
 import com.alten.shop.alterShop.service.ProductService;
+import java.lang.reflect.Field;
 
+
+/**
+ * Implémentation du service ProductService pour la gestion des produits.
+ */
 @Service
 public class ProductServiceImpl implements ProductService {
 
-	@Autowired
-	private ProductRepository productRepository;
-	
-	@Override
-    public Product createProduct(Product product) {
-        
-        return productRepository.save(product);
+    @Autowired
+    private ProductRepository productRepository;
+
+    @Override
+    public ProductDto createProduct(ProductDto productDto) {
+        // Convertir le DTO en entité
+        Product product = ProductMapper.toEntity(productDto);
+        // Sauvegarder le produit en base de données
+        Product createdProduct = productRepository.save(product);
+        // Convertir l'entité en DTO et le renvoyer
+        return ProductMapper.toDto(createdProduct);
     }
 
+    @Override
+    public ProductDto getProductById(Long id) {
+        // Rechercher le produit par son ID en base de données
+        Product product = productRepository.findById(id)
+                .orElseThrow(() -> new ProductNotFoundException("Product not found with id: " + id));
+        // Convertir l'entité en DTO et le renvoyer
+        return ProductMapper.toDto(product);
+    }
 
-	 @Override
-	    public Product getProductById(Long id) {
-	        // Récupérer un produit par son ID
-	        return productRepository.findById(id)
-	                .orElseThrow(() -> new ProductNotFoundException("Product not found with id : " + id));
-	    }
+    @Override
+    public ProductDto updateProduct(Long id, ProductDto productDto) {
+        // Rechercher le produit existant par son ID en base de données
+        Product product = productRepository.findById(id)
+                .orElseThrow(() -> new ProductNotFoundException("Product not found with id: " + id));
+        // Mettre à jour les champs du produit avec les valeurs du DTO
+        product.setName(productDto.getName());
+        product.setPrice(productDto.getPrice());
+        // Mettre à jour les autres champs en fonction de vos besoins
+        // Sauvegarder le produit mis à jour en base de données
+        Product updatedProduct = productRepository.save(product);
+        // Convertir l'entité mise à jour en DTO et le renvoyer
+        return ProductMapper.toDto(updatedProduct);
+    }
+
+    @Override
+    public void deleteProduct(Long id) {
+        // Vérifier si le produit existe avant de le supprimer
+        if (!productRepository.existsById(id)) {
+            throw new ProductNotFoundException("Product not found with id: " + id);
+        }
+        // Supprimer le produit de la base de données
+        productRepository.deleteById(id);
+    }
+
+    @Override
+    public List<ProductDto> getAllProducts() {
+        // Récupérer tous les produits de la base de données
+        List<Product> products = productRepository.findAll();
+        // Convertir la liste d'entités en une liste de DTO et la renvoyer
+        return products.stream()
+                .map(ProductMapper::toDto)
+                .collect(Collectors.toList());
+    }
+    
+   
+    
+    
 
 
-	 @Override
-	    public Product updateProduct(Long id, Product updatedProduct) {
-	        
-		 // Trouver le produit existant ou lancer une exception si non trouvé
-	        Product product = productRepository.findById(id)
-	                .orElseThrow(() -> new ProductNotFoundException("Product not found with id: " + id));
-	        
-	        // Mettre à jour les champs du produit existant avec les valeurs de updatedProduct
-	        product.setName(updatedProduct.getName());
-	        product.setPrice(updatedProduct.getPrice());
-	        
-
-	        // Sauvegarder et renvoyer le produit mis à jour
-	        return productRepository.save(product);
-	    }
-
-	 @Override
-	    public void deleteProduct(Long id) {
-	        // Vérifier si le produit existe avant de le supprimer
-		 
-	        if (!productRepository.existsById(id)) {
-	            throw new ProductNotFoundException("Product not found with id: " + id);
-	        }
-	        productRepository.deleteById(id);
-	    }
-
-
-	 @Override
-	    public List<Product> getAllProducts() {
-	        // Récupérer tous les produits
-	        return productRepository.findAll();
-	    }
 
 }

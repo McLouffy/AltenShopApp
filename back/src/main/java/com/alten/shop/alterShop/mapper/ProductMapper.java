@@ -20,7 +20,7 @@ public class ProductMapper {
 		return product;
 	}
 
-	public static ProductDto toDTO(Product product) {
+	public static ProductDto toDto(Product product) {
 		ProductDto productDto = new ProductDto();
 		productDto.setId(product.getId());
 		productDto.setCode(product.getCode());
