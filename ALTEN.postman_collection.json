@@ -1,0 +1,109 @@
+{
+	"info": {
+		"_postman_id": "1ee6bf9b-212f-4381-8132-a94738aeda5c",
+		"name": "ALTEN",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "24716009"
+	},
+	"item": [
+		{
+			"name": "createProduit",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"code\": \"P001\",\r\n  \"name\": \"Product 1\",\r\n  \"description\": \"This is product 1\",\r\n  \"price\": 10.99,\r\n  \"quantity\": 50,\r\n  \"inventoryStatus\": \"IN_STOCK\",\r\n  \"category\": \"Electronics\",\r\n  \"image\": \"product1.jpg\",\r\n  \"rating\": 4.5\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3307/api/alten/products",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3307",
+					"path": [
+						"api",
+						"alten",
+						"products"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetAllProducts",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/alten/product/{id}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"alten",
+						"product",
+						"{id}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetProductById",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "UpdateProduct",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "DeleteProduct",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/alten/product/2",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"alten",
+						"product",
+						"2"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
