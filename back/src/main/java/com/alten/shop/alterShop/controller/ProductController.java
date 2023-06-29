@@ -18,6 +18,10 @@ import com.alten.shop.alterShop.exception.ProductNotFoundException;
 import com.alten.shop.alterShop.model.Product;
 import com.alten.shop.alterShop.service.ProductService;
 
+
+/**
+ * Classe de contrôleur REST pour la gestion des produits.
+ */
 @RestController
 @RequestMapping("/api/alten")
 public class ProductController {
@@ -25,14 +29,24 @@ public class ProductController {
     @Autowired
     private ProductService productService;
 
-    // Obtenir tous les produits
+    /**
+     * Obtenir tous les produits
+     *
+     * 
+     * @return Liste des produits présents en BDD
+     */
     @GetMapping
     public ResponseEntity<List<Product>> getAllProducts() {
         List<Product> products = productService.getAllProducts();
         return ResponseEntity.ok(products);
     }
 
-    // Obtenir un produit par ID
+    /**
+     * Obtenir un produit par ID.
+     *
+     * @param id L'ID du produit à récupérer.
+     * @return Le produit correspondant à l'ID spécifié.
+     */
     @GetMapping("/{id}")
     public ResponseEntity<Product> getProductById(@PathVariable Long id) {
         Product product = productService.getProductById(id);
@@ -42,14 +56,25 @@ public class ProductController {
         return ResponseEntity.ok(product);
     }
 
-    // Créer un nouveau produit
+    /**
+     * Créer un nouveau produit.
+     *
+     * @param product Le produit à créer.
+     * @return Le produit créé.
+     */
     @PostMapping("/products")
     public ResponseEntity<Product> createProduct(@RequestBody Product product) {
         Product createdProduct = productService.createProduct(product);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdProduct);
     }
 
-    // Mettre à jour un produit
+    /**
+     * Mettre à jour un produit.
+     *
+     * @param id du produit à mettre à jour
+     * @param product, le produit à mettre à jour
+     * @return Le produit créé.
+     */
     @PutMapping("/{id}")
     public ResponseEntity<Product> updateProduct(@PathVariable Long id, @RequestBody Product product) {
         try {
@@ -60,7 +85,13 @@ public class ProductController {
         }
     }
 
-    // Supprimer un produit
+    /**
+     * Suppression d'un produit
+     *
+     * @param id du produit à supprimer
+    
+     * 
+     */
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteProduct(@PathVariable Long id) {
         try {
