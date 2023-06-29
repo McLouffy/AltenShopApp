@@ -1,11 +1,11 @@
 package com.alten.shop.alterShop.model;
 
-import jakarta.persistence.*;
-import jakarta.validation.constraints.DecimalMax;
-import jakarta.validation.constraints.DecimalMin;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -22,13 +22,16 @@ public class Product {
     private Long id;
 
     @NotBlank(message = "Le code du produit est requis")
+    @Size(max = 50, message = "Le code du produit ne peut pas dépasser 50 caractères")
     @Column(name = "code")
     private String code;
 
     @NotBlank(message = "Le nom du produit est requis")
+    @Size(max = 100, message = "Le nom du produit ne peut pas dépasser 100 caractères")
     @Column(name = "name")
     private String name;
 
+    @Size(max = 500, message = "La description du produit ne peut pas dépasser 500 caractères")
     @Column(name = "description")
     private String description;
 
@@ -45,6 +48,7 @@ public class Product {
     @Column(name = "inventory_status")
     private String inventoryStatus;
 
+    @NotBlank(message = "La catégorie du produit est requise")
     @Column(name = "category")
     private String category;
 
