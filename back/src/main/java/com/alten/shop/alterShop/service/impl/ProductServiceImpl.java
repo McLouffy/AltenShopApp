@@ -2,20 +2,16 @@ package com.alten.shop.alterShop.service.impl;
 
 
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.util.ReflectionUtils;
 import org.springframework.stereotype.Service;
-
 import com.alten.shop.alterShop.exception.ProductNotFoundException;
 import com.alten.shop.alterShop.mapper.ProductMapper;
 import com.alten.shop.alterShop.model.Product;
 import com.alten.shop.alterShop.dto.ProductDto;
 import com.alten.shop.alterShop.repository.ProductRepository;
 import com.alten.shop.alterShop.service.ProductService;
-import java.lang.reflect.Field;
 
 
 /**
