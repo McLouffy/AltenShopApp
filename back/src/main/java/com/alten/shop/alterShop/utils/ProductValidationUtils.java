@@ -3,15 +3,12 @@ package com.alten.shop.alterShop.utils;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
-
 import com.alten.shop.alterShop.dto.ProductDto;
 import com.alten.shop.alterShop.payload.ProductResponse;
 import com.alten.shop.alterShop.payload.ReturnMessageDto;
-
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validator;
 

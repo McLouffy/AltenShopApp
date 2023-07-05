@@ -1,9 +1,7 @@
 package com.alten.shop.alterShop.service.impl;
 
-
 import java.util.List;
 import java.util.stream.Collectors;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.alten.shop.alterShop.exception.ProductNotFoundException;
@@ -47,10 +45,12 @@ public class ProductServiceImpl implements ProductService {
         // Rechercher le produit existant par son ID en base de données
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new ProductNotFoundException("Product not found with id: " + id));
+        
         // Mettre à jour les champs du produit avec les valeurs du DTO
         product.setName(productDto.getName());
         product.setPrice(productDto.getPrice());
-        // Mettre à jour les autres champs en fonction de vos besoins
+        // Mettre à jour les autres champs en fonction des besoins
+        
         // Sauvegarder le produit mis à jour en base de données
         Product updatedProduct = productRepository.save(product);
         // Convertir l'entité mise à jour en DTO et le renvoyer
@@ -76,6 +76,39 @@ public class ProductServiceImpl implements ProductService {
                 .map(ProductMapper::toDto)
                 .collect(Collectors.toList());
     }
+
+	@Override
+	public ProductDto updateOneFieldInProduct(ProductDto productDto, Long id) {
+		
+		 // Rechercher le produit existant par son ID en base de données
+	    Product product = productRepository.findById(id)
+	            .orElseThrow(() -> new ProductNotFoundException("Product not found with id: " + id));
+
+	    // Mettre à jour les champs spécifiques du produit avec les valeurs du DTO
+	    if (productDto.getName() != null) {
+	        product.setName(productDto.getName());
+	    }
+	    if (productDto.getPrice() != null) {
+	        product.setPrice(productDto.getPrice());
+	    }
+	    
+	    if (productDto.getDescription() != null) {
+	        product.setDescription(productDto.getDescription());
+	    }
+	    if (productDto.getQuantity() != null) {
+	        product.setQuantity(productDto.getQuantity());
+	    }
+	    //Ajout d'autres champs ) mettre à jours en fonction des besoins applicatifs
+	   
+	    
+	    // Sauvegarder le produit mis à jour en base de données
+	    Product updatedProduct = productRepository.save(product);
+
+	    // Convertir l'entité mise à jour en DTO et le renvoyer
+	    return ProductMapper.toDto(updatedProduct);
+		
+		
+	}
     
    
     

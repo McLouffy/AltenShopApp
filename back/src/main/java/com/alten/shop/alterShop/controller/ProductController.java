@@ -1,19 +1,17 @@
 package com.alten.shop.alterShop.controller;
 
 import java.util.List;
-import java.util.Map;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import com.alten.shop.alterShop.dto.ProductDto; // Importez le DTO
+import com.alten.shop.alterShop.dto.ProductDto;
+import com.alten.shop.alterShop.enumeration.CodeRetourRest;
 import com.alten.shop.alterShop.exception.ProductNotFoundException;
 import com.alten.shop.alterShop.payload.ProductResponse;
+import com.alten.shop.alterShop.payload.ReturnMessageDto;
 import com.alten.shop.alterShop.service.ProductService;
 import com.alten.shop.alterShop.utils.ProductValidationUtils;
 
@@ -44,7 +42,6 @@ public class ProductController {
 		if (products.isEmpty()) {
 			String message = "Aucun produit n'est présent en BDD";
 			logger.error(message); // Affiche le message dans la console avec le niveau INFO
-
 		}
 		return ResponseEntity.ok(products);
 	}
@@ -58,16 +55,18 @@ public class ProductController {
 	 *         aucun produit n'est trouvé.
 	 */
 	@GetMapping("/product/{id}")
-	public ResponseEntity<ProductDto> getProductById(@PathVariable Long id) {
-		ProductDto product = productService.getProductById(id);
-		if (product == null) {
-			String message = "Le produit avec l'id " + id + " n'a pas été trouvé";
-			logger.info(message); // Affiche le message dans la console avec le niveau INFO
-			return ResponseEntity.notFound().build();
+	public ResponseEntity<?> getProductById(@PathVariable Long id) {
+		try {
+			ProductDto product = productService.getProductById(id);
+			return ResponseEntity.ok(product);
+		} catch (ProductNotFoundException ex) {
+			String message = "Aucun produit avec l'ID " + id + " n'existe en base de données";
+			logger.info(message);
+			return new ResponseEntity<ReturnMessageDto>(
+					new ReturnMessageDto(CodeRetourRest.PRODUCT_NOT_FOUND.getCode(),
+							CodeRetourRest.PRODUCT_NOT_FOUND.getDescription(), HttpStatus.NOT_FOUND),
+					HttpStatus.NOT_FOUND);
 		}
-		String message = "Insertion du produit en BDD réussie";
-		logger.info(message); // Affiche le message dans la console avec le niveau INFO
-		return ResponseEntity.ok(product);
 	}
 
 	/**
@@ -84,13 +83,15 @@ public class ProductController {
 
 		// Vérifier si des erreurs de validation sont présentes
 		if (response != null) {
-			return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<ReturnMessageDto>(
+					new ReturnMessageDto(CodeRetourRest.ERROR_VALIDATION.getCode(),
+							CodeRetourRest.ERROR_VALIDATION.getDescription(), HttpStatus.BAD_REQUEST),
+					HttpStatus.BAD_REQUEST);
 		}
-
 		// Si aucune erreur de validation, continuer avec la création du produit
 		ProductDto createdProduct = productService.createProduct(productDto);
 		String message = "Produit crée avec succès";
-		logger.info(message); 
+		logger.info(message);
 		return new ResponseEntity<>(createdProduct, HttpStatus.CREATED);
 	}
 
@@ -115,6 +116,13 @@ public class ProductController {
 			return ResponseEntity.notFound().build();
 		}
 	}
+	
+	
+	@PatchMapping("/product/{id}")
+	public ResponseEntity<ProductDto> UpdateOneFieldProduct(@PathVariable Long id, @RequestBody ProductDto productDto) {
+	    ProductDto updatedProduct = productService.updateOneFieldInProduct(productDto, id);
+	    return ResponseEntity.ok(updatedProduct);
+	}
 
 	/**
 	 * Supprime un produit.
@@ -125,7 +133,7 @@ public class ProductController {
 	 *         si aucun produit n'est trouvé.
 	 */
 	@DeleteMapping("/product/{id}")
-	public ResponseEntity<String> deleteProduct(@PathVariable Long id) {
+	public ResponseEntity<?> deleteProduct(@PathVariable Long id) {
 		try {
 			productService.deleteProduct(id);
 			String message = "Suppression du produit réussie avec l'id " + id;
@@ -134,8 +142,10 @@ public class ProductController {
 		} catch (ProductNotFoundException e) {
 			String errorMessage = "Produit non trouvé avec l'ID : " + id;
 			logger.error(errorMessage); // Affiche le message d'erreur dans la console avec le niveau ERROR
-
-			return ResponseEntity.notFound().build();
+			return new ResponseEntity<ReturnMessageDto>(
+					new ReturnMessageDto(CodeRetourRest.PRODUCT_NOT_FOUND.getCode(),
+							CodeRetourRest.PRODUCT_NOT_FOUND.getDescription(), HttpStatus.NOT_FOUND),
+					HttpStatus.NOT_FOUND);
 		}
 	}
 }

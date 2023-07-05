@@ -1,4 +1,4 @@
-package alterShop.service;
+package alterShop.back.serviceImpl;
 
 
 import com.alten.shop.alterShop.dto.ProductDto;
@@ -42,11 +42,6 @@ public class ProductServiceImplTest {
 
     @Test
     public void testCreateProduct() {
-        // Mock des données d'entrée
-        ProductDto productDto = new ProductDto();
-        productDto.setName("Product 1");
-        productDto.setPrice(10.0);
-
         // Mock du comportement du repository
         Product createdProduct = new Product();
         createdProduct.setId(1L);
@@ -55,7 +50,7 @@ public class ProductServiceImplTest {
         when(productRepository.save(any(Product.class))).thenReturn(createdProduct);
 
         // Appel de la méthode à tester
-        ProductDto productDtoCreated = productService.createProduct(productDto);
+        ProductDto productDtoCreated = productService.createProduct(new ProductDto());
 
         // Vérification des résultats
         assertEquals(1L, productDtoCreated.getId());

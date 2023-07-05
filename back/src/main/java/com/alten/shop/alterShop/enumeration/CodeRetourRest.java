@@ -5,6 +5,7 @@ public enum CodeRetourRest {
 	PRODUCT_UPDATED(2, "Product updated"),
 	PRODUCT_DELETED(3, "Product deleted"),
 	PRODUCT_NOT_FOUND(4, "Product not found"),
+	ERROR_VALIDATION(10, "Validation errors on the products"),
 	OK_AVEC_RESULTAT(20,"appel reussi avec resultat"),
 	OK_SANS_RESULTAT(21, "appel reussi sans resultat");
 

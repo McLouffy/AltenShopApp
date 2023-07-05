@@ -1,28 +1,38 @@
 package com.alten.shop.alterShop.payload;
 
+import org.springframework.http.HttpStatus;
+
 public class ReturnMessageDto {
-    private int statusCode;
-    private String message;
+	private int statusCode;
+	private String message;
+	HttpStatus statusHttp;
 
-    public ReturnMessageDto(int statusCode, String message) {
-        this.statusCode = statusCode;
-        this.message = message;
-    }
+	public ReturnMessageDto(int statusCode, String message) {
+		this.statusCode = statusCode;
+		this.message = message;
+	}
 
-    public int getStatusCode() {
-        return statusCode;
-    }
+	public ReturnMessageDto(int statusCode, String message, HttpStatus statusHttp) {
+		
+		this.statusCode=statusCode;
+		this.message=message;
+		this.statusHttp=statusHttp;
+		
+	}
 
-    public void setStatusCode(int statusCode) {
-        this.statusCode = statusCode;
-    }
+	public int getStatusCode() {
+		return statusCode;
+	}
 
-    public String getMessage() {
-        return message;
-    }
+	public void setStatusCode(int statusCode) {
+		this.statusCode = statusCode;
+	}
 
-    public void setMessage(String message) {
-        this.message = message;
-    }
+	public String getMessage() {
+		return message;
+	}
+
+	public void setMessage(String message) {
+		this.message = message;
+	}
 }
-
